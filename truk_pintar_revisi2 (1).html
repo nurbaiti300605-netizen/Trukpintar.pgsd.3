@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Truk Pintar — Media Pembelajaran Membaca Permulaan</title>
+<style>
+:root{
+  --yellow:#F9D949;--green:#A2E0A6;--pink:#F5A1A1;--blue:#ABDBFF;
+  --orange:#FFD08A;--purple:#C9B5FF;--ink:#263238;--muted:#667085;
+  --paper:#fffdf7;--line:#e6e8ec;--shadow:0 8px 24px rgba(35,45,55,.09);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family: "Trebuchet MS", "Segoe UI", Arial, sans-serif;color:var(--ink);
+ background:linear-gradient(135deg,#fff9df,#f4fbff 55%,#f5fff4);min-height:100vh}
+button,input{font:inherit}
+button{cursor:pointer;border:0}
+.app{max-width:1120px;margin:0 auto;padding:18px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:1.2rem}
+.brand-icon{width:46px;height:46px;border-radius:15px;background:var(--yellow);display:grid;place-items:center;font-size:1.8rem;box-shadow:var(--shadow)}
+.top-actions{display:flex;gap:8px}
+.icon-btn,.secondary-btn{background:white;border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-weight:800;color:var(--ink)}
+.screen{display:none;animation:fade .2s ease}.screen.active{display:block}
+@keyframes fade{from{opacity:.3;transform:translateY(5px)}to{opacity:1;transform:none}}
+.panel{background:rgba(255,255,255,.94);border:1px solid rgba(225,230,235,.9);border-radius:26px;padding:clamp(18px,4vw,34px);box-shadow:var(--shadow)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;align-items:center;gap:22px;min-height:490px;overflow:hidden;position:relative}
+h1{font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;margin:8px 0 12px}
+h2{font-size:clamp(1.45rem,3vw,2rem);margin:0 0 10px}
+h3{margin:0 0 8px}
+p{line-height:1.55;color:#56616d}
+.eyebrow{display:inline-block;padding:7px 12px;border-radius:99px;background:#fff3b5;font-weight:900;font-size:.82rem}
+.hero-art{display:grid;place-items:center;min-height:300px;background:radial-gradient(circle,#fff3b5 0 42%,transparent 43%);font-size:clamp(8rem,20vw,13rem)}
+.truck{display:inline-block;filter:drop-shadow(0 9px 3px rgba(0,0,0,.12));animation:bob 2.6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-8px)}}
+.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}
+.primary-btn,.green-btn,.pink-btn{padding:13px 22px;border-radius:16px;font-weight:900;font-size:1rem;box-shadow:0 4px 0 rgba(0,0,0,.12);transition:.15s}
+.primary-btn{background:var(--yellow);color:#302900}.green-btn{background:var(--green);color:#17351d}.pink-btn{background:var(--pink);color:#4b2020}
+.primary-btn:active,.green-btn:active,.pink-btn:active{transform:translateY(3px);box-shadow:none}
+.full{width:100%}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{background:white;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:0 3px 12px rgba(0,0,0,.035)}
+.choice{display:flex;align-items:center;gap:14px;text-align:left;min-height:112px}
+.choice .emoji{font-size:2.8rem}
+.choice strong{display:block;font-size:1.12rem}
+.center{text-align:center}
+.small{font-size:.88rem;color:var(--muted)}
+.form{max-width:460px;margin:0 auto}
+.field{display:block;width:100%;padding:14px 15px;border:1px solid #d8dde4;border-radius:14px;margin:8px 0 14px;background:white}
+.backline{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.home-btn{border-radius:50%;width:42px;height:42px;background:#fff;border:1px solid var(--line);font-size:1.2rem}
+.role-badge{background:#eef6ff;border-radius:99px;padding:7px 12px;font-size:.82rem;font-weight:800}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+.stat{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px}
+.stat b{display:block;font-size:1.45rem}
+.progress{height:12px;background:#edf0f3;border-radius:99px;overflow:hidden;margin:8px 0}
+.progress span{display:block;height:100%;background:var(--green);border-radius:99px;width:0;transition:width .3s}
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.menu-tile{padding:22px 14px;min-height:130px;border-radius:20px;background:white;border:1px solid var(--line);font-weight:900;font-size:1rem}
+.menu-tile span{display:block;font-size:2.2rem;margin-bottom:8px}
+.instruction-list{display:grid;gap:12px;margin:20px 0}
+.instruction{display:flex;gap:12px;align-items:flex-start;background:#f8fafc;padding:14px;border-radius:15px}
+.step{background:var(--yellow);width:30px;height:30px;flex:0 0 30px;border-radius:50%;display:grid;place-items:center;font-weight:900}
+.student-row{display:flex;align-items:center;gap:14px;background:#fff;border:1px solid var(--line);padding:16px;border-radius:18px;margin:16px 0}
+.avatar{width:68px;height:68px;border-radius:50%;background:#ffe8e8;display:grid;place-items:center;font-size:2.5rem}
+.level-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.level-card{background:white;border:1px solid var(--line);border-radius:18px;padding:15px;text-align:center}
+.level-card .emoji{font-size:2.2rem}
+.level-card.locked{opacity:.55}
+.level-card.done{border:2px solid #83c98c;background:#f3fff4}
+.level-card button{margin-top:8px;width:100%}
+.lesson{max-width:720px;margin:auto}
+.word-box{background:#fff8d8;border:2px dashed #e5c53c;border-radius:22px;padding:22px;text-align:center;font-size:clamp(2rem,8vw,3.5rem);font-weight:1000;letter-spacing:1px;margin:18px 0}
+.truck-speech{display:flex;align-items:center;justify-content:center;gap:18px;background:linear-gradient(135deg,#fff8e6,#fff2c5);border:2px solid #f0dda2;border-radius:24px;padding:20px 16px;margin:18px 0;min-height:190px}
+.truck-speech .truck-face{font-size:clamp(5.5rem,15vw,8rem);line-height:1;filter:drop-shadow(0 7px 3px rgba(0,0,0,.15));flex:0 0 auto;animation:bob 2.6s ease-in-out infinite}
+.speech{background:white;border:2px solid #f2d98a;border-radius:20px;padding:16px;flex:1;font-weight:800;position:relative;max-width:390px;box-shadow:0 5px 12px rgba(0,0,0,.06)}
+.speech:before{content:"";position:absolute;left:-11px;top:38px;width:18px;height:18px;background:white;border-left:2px solid #f2d98a;border-bottom:2px solid #f2d98a;transform:rotate(45deg)}
+.mic-wrap{text-align:center;background:#f6fbff;border:1px solid #dceefb;border-radius:20px;padding:18px;margin:15px 0}
+.mic-btn{width:76px;height:76px;border-radius:50%;background:var(--pink);font-size:2rem;box-shadow:0 5px 0 #d67f7f}
+.mic-btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.status{font-size:.9rem;font-weight:800;margin-top:10px}
+.notice{padding:13px 15px;border-radius:14px;background:#fff4d8;color:#594600;font-size:.9rem;line-height:1.45;margin:12px 0}
+.feedback{padding:18px;border-radius:18px;background:#edfff0;border:1px solid #bce8c2;margin:14px 0}
+.hidden{display:none!important}
+footer{text-align:center;color:#7a8490;font-size:.8rem;padding:22px 5px}
+@media(max-width:700px){
+ .app{padding:12px}.hero{grid-template-columns:1fr;min-height:0;text-align:center}.hero-art{min-height:190px;grid-row:1}
+ .grid,.stats{grid-template-columns:1fr}.level-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .topbar{align-items:flex-start}.brand{font-size:1rem}.panel{padding:18px}
+}
+@media(max-width:390px){.level-grid{grid-template-columns:1fr}.actions>*{width:100%}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">🚚</div><div>TRUK PINTAR <div class="small">Belajar membaca jadi menyenangkan</div></div></div>
+    <div class="top-actions"><button class="icon-btn" onclick="goHome()" aria-label="Kembali ke beranda">⌂ Beranda</button></div>
+  </header>
+
+  <!-- 1. BERANDA -->
+  <section id="home" class="screen active">
+    <div class="panel hero">
+      <div>
+        <span class="eyebrow">Media Pembelajaran Membaca Permulaan</span>
+        <h1>Halo, teman belajar! 👋</h1>
+        <p>Ayo belajar membaca bersama Truk Pintar. Dengarkan contoh dari truk, lalu coba baca dengan suaramu sendiri.</p>
+        <div class="actions">
+          <button class="primary-btn" onclick="show('role')">Mulai ➜</button>
+          <button class="green-btn" onclick="show('guide')">Petunjuk ☰</button>
+        </div>
+      </div>
+      <div class="hero-art"><span class="truck">🚚</span></div>
+    </div>
+  </section>
+
+  <!-- PETUNJUK -->
+  <section id="guide" class="screen">
+    <div class="panel">
+      <div class="backline"><button class="home-btn" onclick="goHome()" title="Kembali ke beranda">⌂</button><span class="role-badge">Petunjuk Penggunaan</span></div>
+      <div class="center"><div style="font-size:4rem">📖</div><h2>Petunjuk Penggunaan</h2><p>Ikuti langkah-langkah berikut untuk menggunakan Truk Pintar.</p></div>
+      <div class="instruction-list">
+        <div class="instruction"><span class="step">1</span><div><b>Pilih Mulai</b><div class="small">Pilih peran Guru atau Orang Tua untuk masuk ke aplikasi demo.</div></div></div>
+        <div class="instruction"><span class="step">2</span><div><b>Pilih siswa</b><div class="small">Masukkan nama siswa yang akan dipantau untuk melihat perjalanan belajarnya.</div></div></div>
+        <div class="instruction"><span class="step">3</span><div><b>Dengarkan Truk Pintar</b><div class="small">Tekan tombol Dengarkan Truk. Truk akan membacakan contoh terlebih dahulu.</div></div></div>
+        <div class="instruction"><span class="step">4</span><div><b>Gunakan mikrofon</b><div class="small">Setelah contoh suara selesai, izinkan akses mikrofon lalu rekam bacaanmu.</div></div></div>
+        <div class="instruction"><span class="step">5</span><div><b>Selesaikan latihan</b><div class="small">Putar kembali rekaman jika perlu, lalu tandai latihan selesai untuk melanjutkan.</div></div></div>
+      </div>
+      <div class="notice">Catatan: rekaman digunakan sebagai dokumentasi latihan. Demo ini tidak mengenali atau menilai ketepatan ucapan secara otomatis.</div>
+      <div class="center"><button class="primary-btn" onclick="goHome()">⌂ Kembali ke Beranda</button></div>
+    </div>
+  </section>
+
+  <!-- PILIH PERAN -->
+  <section id="role" class="screen">
+    <div class="panel">
+      <div class="backline"><button class="home-btn" onclick="goHome()">←</button><span class="role-badge">Pilih Peran Pengguna</span></div>
+      <div class="center"><h2>Pilih Peran Pengguna</h2><p>Silakan pilih peran untuk membuka demo pemantauan.</p></div>
+      <div class="grid">
+        <button class="card choice" onclick="chooseRole('Guru')"><span class="emoji">👩‍🏫</span><span><strong>Guru</strong><span class="small">Memantau perkembangan siswa</span></span></button>
+        <button class="card choice" onclick="chooseRole('Orang Tua')"><span class="emoji">👨‍👩‍👦</span><span><strong>Orang Tua</strong><span class="small">Melihat perkembangan anak</span></span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOGIN DEMO -->
+  <section id="login" class="screen">
+    <div class="panel form">
+      <div class="backline"><button class="home-btn" onclick="show('role')">←</button><span class="role-badge" id="loginRole">Login</span></div>
+      <div class="center"><div style="font-size:3.5rem">🔐</div><h2>Login Demo</h2><p>Masukkan data contoh atau langsung masuk ke demo.</p></div>
+      <label class="small" for="email">Email</label><input id="email" class="field" type="email" placeholder="contoh@email.com">
+      <label class="small" for="password">Kata sandi</label><input id="password" class="field" type="password" placeholder="Kata sandi">
+      <button class="primary-btn full" onclick="enterDashboard()">Masuk</button>
+      <p class="small center">Demo ini tidak memverifikasi akun dan tidak menyimpan data login.</p>
+    </div>
+  </section>
+
+  <!-- DASHBOARD GABUNGAN -->
+  <section id="dashboard" class="screen">
+    <div class="panel">
+      <div class="backline"><div><span class="role-badge" id="roleLabel">Dashboard</span><h2 style="margin:10px 0 0">Hasil Perkembangan Anak</h2></div><button class="home-btn" onclick="goHome()">⌂</button></div>
+      <div class="student-row"><div class="avatar">👦🏻</div><div style="flex:1"><h2 style="margin:0" id="dashboardStudentName">Nama Siswa</h2><span class="small">Kelas III SD</span></div><span style="font-size:2.5rem">🚚</span></div>
+      <h3>Ringkasan Perkembangan</h3>
+      <div class="stats">
+        <div class="stat">📚 Membaca<b id="readPct">0%</b><div class="progress"><span id="readBar"></span></div></div>
+        <div class="stat">🏅 Level selesai<b id="levelCount">0 / 5</b><div class="progress"><span id="levelBar"></span></div></div>
+        <div class="stat">✏️ Latihan selesai<b id="taskCount">0</b><div class="progress"><span id="taskBar"></span></div></div>
+      </div>
+      <div class="notice">Persentase di halaman ini menunjukkan penyelesaian aktivitas demo, bukan hasil pengukuran kemampuan membaca yang tervalidasi.</div>
+      <div class="actions"><button class="primary-btn" onclick="show('levels')">Mulai / Lanjut Belajar ➜</button><button class="secondary-btn" onclick="editStudentName()">Ubah Nama Siswa</button></div>
+    </div>
+  </section>
+
+  <!-- PILIH SISWA -->
+  <section id="student" class="screen">
+    <div class="panel form center">
+      <div class="backline"><button class="home-btn" onclick="show('login')">←</button><span class="role-badge">Data Siswa</span></div>
+      <div style="font-size:3.5rem">👦🏻</div><h2>Masukkan Nama Siswa</h2>
+      <p>Isi nama anak terlebih dahulu. Setelah itu, hasil perkembangan dan level pembelajaran akan ditampilkan.</p>
+      <div class="student-row"><div class="avatar">👦🏻</div><div style="flex:1;text-align:left"><label class="small" for="studentNameInput">Nama siswa</label><input id="studentNameInput" class="field" type="text" maxlength="40" placeholder="Ketik nama siswa" autocomplete="off"></div></div>
+      <button class="primary-btn full" onclick="saveStudentName()">Simpan Nama &amp; Masuk ke Pembelajaran ➜</button>
+    </div>
+  </section>
+
+  <!-- DIAGNOSTIK -->
+  <section id="diagnostic" class="screen">
+    <div class="panel lesson center">
+      <div class="backline"><button class="home-btn" onclick="show('student')">←</button><span class="role-badge">Tes Diagnostik Awal</span></div>
+      <div style="font-size:3.5rem">📋</div><h2>Diagnostik Awal</h2><p>Yuk, kita cek kemampuan awal membaca terlebih dahulu!</p>
+      <div class="card">
+        <div class="backline"><b id="diagCounter">Soal 1 dari 5</b><span class="role-badge" id="diagScore">Benar: 0</span></div>
+        <div class="progress"><span id="diagProgress" style="width:0%"></span></div>
+        <h3 id="diagQuestion">Pilih huruf yang sama dengan contoh.</h3>
+        <div class="word-box" id="diagPrompt" style="font-size:2.5rem">A</div>
+        <div class="grid" id="diagOptions"></div>
+        <div id="diagFeedback" class="feedback hidden" aria-live="polite"></div>
+        <button id="diagNext" class="primary-btn full hidden" onclick="nextDiagnostic()">Soal Berikutnya ➜</button>
+        <button id="diagContinue" class="primary-btn full hidden" onclick="finishDiagnostic()">Lihat Hasil ➜</button>
+      </div>
+    </div>
+  </section>
+  <section id="diagResult" class="screen">
+    <div class="panel lesson center"><div style="font-size:4rem">🚚</div><h2>Hasil Tes Diagnostik Awal</h2><div class="word-box" id="diagFinalScore" style="font-size:2rem">0 dari 5 benar</div><p id="diagResultText">Tes awal sudah selesai. Kita mulai belajar secara bertahap dari Level 1.</p><button class="primary-btn" onclick="show('levels')">Mulai Belajar ➜</button></div>
+  </section>
+
+  <!-- MENU BELAJAR -->
+  <section id="levels" class="screen">
+    <div class="panel">
+      <div class="backline"><button class="home-btn" onclick="show('dashboard')">←</button><span class="role-badge">Pilih Level Belajar</span></div>
+      <h2 class="center">Pilih Level Belajar</h2><p class="center">Selesaikan latihan untuk membuka level berikutnya.</p>
+      <div class="level-grid" id="levelGrid"></div>
+    </div>
+  </section>
+
+  <!-- LATIHAN -->
+  <section id="lesson" class="screen">
+    <div class="panel lesson">
+      <div class="backline"><button class="home-btn" onclick="show('levels')">←</button><span class="role-badge" id="lessonLevel">Level</span></div>
+      <div class="center"><h2 id="lessonTitle">Latihan Membaca</h2><p id="lessonPrompt">Dengarkan contoh dari Truk Pintar.</p></div>
+      <div class="word-box" id="targetText">rumah</div>
+      <div class="truck-speech"><div class="truck-face">🚚</div><div class="speech"><div><b>Truk Pintar berkata:</b></div><div id="truckLine">Dengarkan contoh bacaanku, ya!</div></div></div>
+      <div class="actions" style="justify-content:center;margin-top:8px"><button class="primary-btn" id="speakBtn" onclick="speakExample()">🔊 Dengarkan Truk</button></div>
+      <div class="mic-wrap">
+        <div style="font-weight:900;margin-bottom:8px">Sekarang giliranmu membaca!</div>
+        <button class="mic-btn" id="recordBtn" onclick="toggleRecording()" disabled title="Mikrofon aktif setelah contoh selesai">🎙️</button>
+        <div class="status" id="micStatus">Dengarkan contoh Truk Pintar terlebih dahulu.</div>
+        <audio id="playback" controls class="hidden" style="width:100%;margin-top:12px"></audio>
+        <div class="small" style="margin-top:8px">Tekan mikrofon untuk mulai merekam, tekan lagi untuk berhenti.</div>
+      </div>
+      <div class="notice">Rekaman tidak dinilai otomatis. Guru/orang tua dapat mendengarkan rekaman dan menilai menggunakan instrumen penelitian yang telah ditetapkan.</div>
+      <button class="green-btn full" id="completeBtn" onclick="completeTask()" disabled>Saya sudah selesai membaca ✓</button>
+    </div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section id="feedback" class="screen">
+    <div class="panel lesson center">
+      <div style="font-size:4rem">⭐</div><h2>Latihan Selesai!</h2><p>Terima kasih sudah berlatih bersama Truk Pintar. Terus semangat belajar membaca!</p>
+      <div class="feedback"><b>Aktivitas berhasil diselesaikan.</b><div class="small">Penyelesaian latihan tercatat pada progres demo. Ketepatan bacaan tetap perlu dinilai menggunakan instrumen yang sesuai.</div></div>
+      <button class="primary-btn" onclick="show('levels')">Lanjut ➜</button>
+    </div>
+  </section>
+
+  <footer>Truk Pintar · Demo media pembelajaran membaca permulaan kelas III SD</footer>
+</div>
+
+<script>
+const levels = [
+ {name:"Huruf",icon:"🔤",items:[["A","Ini huruf A. Bunyi huruf A adalah /a/. A."],["B","Ini huruf B. Bunyi huruf B adalah /be/. B."],["M","Ini huruf M. Bunyi huruf M adalah /em/. M."]]},
+ {name:"Kata",icon:"🍎",items:[["rumah","ru-mah"],["buku","bu-ku"],["meja","me-ja"]]},
+ {name:"Kalimat",icon:"📖",items:[["Ini buku saya.","I-ni bu-ku sa-ya."],["Ibu memasak nasi.","I-bu me-ma-sak na-si."]]},
+ {name:"Paragraf",icon:"📚",items:[["Saya suka membaca. Setiap sore, saya membaca buku cerita di rumah.","Bacalah paragraf berikut dengan tenang."]]},
+ {name:"Teks",icon:"📕",items:[["Pada hari Minggu, saya pergi ke perpustakaan bersama ibu. Saya memilih buku cerita bergambar. Saya membaca buku itu dengan gembira.","Bacalah teks pendek berikut sampai selesai."]]}
+];
+let currentLevel=0,currentItem=0,completed=new Set(),role="Guru",studentName="",mediaRecorder=null,chunks=[],recordedUrl=null,isRecording=false,exampleFinished=false,diagnosticDone=false,diagnosticIndex=0,diagnosticScore=0;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'});if(id==='dashboard')updateDashboard();if(id==='levels')renderLevels();if(id==='diagnostic')startDiagnostic();}
+function goHome(){if('speechSynthesis'in window)window.speechSynthesis.cancel();show('home')}
+function chooseRole(r){role=r;$('loginRole').textContent='Login '+r;show('login')}
+function enterDashboard(){
+ $('roleLabel').textContent='Akses demo: '+role;
+ show('student'); // Nama siswa diisi sebelum dashboard hasil perkembangan dibuka.
+}
+function saveStudentName(){
+ const value=$('studentNameInput').value.trim();
+ if(!value){$('studentNameInput').focus();$('studentNameInput').placeholder='Nama siswa perlu diisi';return;}
+ studentName=value;
+ $('dashboardStudentName').textContent=studentName;
+ show('dashboard');
+}
+function editStudentName(){
+ $('studentNameInput').value=studentName;
+ show('student');
+}
+function updateDashboard(){
+ $('dashboardStudentName').textContent=studentName||'Nama Siswa';
+ const total=levels.reduce((n,l)=>n+l.items.length,0),done=completed.size,pct=Math.round(done/total*100);
+ $('readPct').textContent=pct+'%';$('readBar').style.width=pct+'%';
+ const doneLevels=levels.filter((l,i)=>l.items.every((_,j)=>completed.has(i+'-'+j))).length;
+ $('levelCount').textContent=doneLevels+' / 5';$('levelBar').style.width=(doneLevels/5*100)+'%';
+ $('taskCount').textContent=done+' / '+total;$('taskBar').style.width=pct+'%';
+}
+function renderLevels(){
+ const wrap=$('levelGrid');wrap.innerHTML='';
+ levels.forEach((l,i)=>{
+  const unlocked=i===0||levels[i-1].items.every((_,j)=>completed.has((i-1)+'-'+j));
+  const done=l.items.every((_,j)=>completed.has(i+'-'+j));
+  const div=document.createElement('div');div.className='level-card '+(done?'done':'')+(!unlocked?' locked':'');
+  div.innerHTML=`<div class="emoji">${l.icon}</div><b>Level ${i+1}</b><div>${l.name}</div><div class="small">${done?'✓ Selesai':unlocked?'Terbuka':'🔒 Terkunci'}</div><button class="${unlocked?'primary-btn':'secondary-btn'}" ${unlocked?'':'disabled'}>${unlocked?'Pilih':'Terkunci'}</button>`;
+  div.querySelector('button').onclick=()=>startLesson(i,0);wrap.appendChild(div);
+ });
+}
+function startLesson(li,ii){
+ currentLevel=li;currentItem=ii;exampleFinished=false;
+ const item=levels[li].items[ii],name=levels[li].name;
+ $('lessonLevel').textContent='Level '+(li+1)+' — '+name;
+ $('lessonTitle').textContent='Latihan Membaca';
+ $('lessonPrompt').textContent=li===0?'Kenali dan bacalah huruf berikut.':'Bacalah '+(li===1?'kata':li===2?'kalimat':li===3?'paragraf':'teks')+' berikut dengan suara jelas.';
+ $('targetText').textContent=item[0];
+ $('truckLine').textContent='Hai! Aku Truk Pintar. Tekan tombol dengarkan, aku akan mencontohkan cara membacanya.';
+ $('recordBtn').disabled=true;$('recordBtn').textContent='🎙️';$('completeBtn').disabled=true;
+ $('micStatus').textContent='Dengarkan contoh Truk Pintar terlebih dahulu.';
+ $('playback').classList.add('hidden');$('playback').removeAttribute('src');
+ $('speakBtn').disabled=false;show('lesson');
+}
+function speakExample(){
+ const text=levels[currentLevel].items[currentItem][0];
+ const model=levels[currentLevel].items[currentItem][1];
+ const spoken=currentLevel===0 ? model : (currentLevel===1 ? model : text);
+ $('truckLine').textContent=spoken;
+ if(!('speechSynthesis'in window)){
+  $('micStatus').textContent='Fitur suara tidak tersedia di browser ini. Contoh tertulis sudah ditampilkan; tekan “Contoh selesai” untuk mengaktifkan mikrofon.';
+  $('speakBtn').textContent='Contoh selesai ✓';$('speakBtn').onclick=manualExampleDone;return;
+ }
+ window.speechSynthesis.cancel();
+ const utter=new SpeechSynthesisUtterance(spoken);utter.lang='id-ID';utter.rate=.82;utter.pitch=1.05;
+ utter.onend=()=>enableMic();utter.onerror=()=>{$('micStatus').textContent='Suara tidak dapat diputar. Gunakan contoh tertulis, lalu tekan tombol contoh selesai.';$('speakBtn').textContent='Contoh selesai ✓';$('speakBtn').onclick=manualExampleDone};
+ $('speakBtn').disabled=true;$('micStatus').textContent='Truk Pintar sedang memberikan contoh...';
+ window.speechSynthesis.speak(utter);
+}
+function manualExampleDone(){enableMic();$('speakBtn').textContent='🔊 Dengarkan Truk';$('speakBtn').onclick=speakExample;$('speakBtn').disabled=false}
+function enableMic(){exampleFinished=true;$('recordBtn').disabled=false;$('micStatus').textContent='Contoh selesai. Sekarang tekan mikrofon untuk membaca.';$('speakBtn').disabled=false}
+async function toggleRecording(){
+ if(!exampleFinished)return;
+ if(isRecording){mediaRecorder.stop();return}
+ if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder){
+  $('micStatus').textContent='Perekaman tidak didukung pada browser/perangkat ini. Kamu tetap dapat menyelesaikan latihan secara demonstrasi.';
+  $('completeBtn').disabled=false;return;
+ }
+ try{
+  const stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];
+  mediaRecorder=new MediaRecorder(stream);
+  mediaRecorder.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data)};
+  mediaRecorder.onstop=()=>{
+   const blob=new Blob(chunks,{type:mediaRecorder.mimeType||'audio/webm'});
+   if(recordedUrl)URL.revokeObjectURL(recordedUrl);recordedUrl=URL.createObjectURL(blob);
+   $('playback').src=recordedUrl;$('playback').classList.remove('hidden');
+   stream.getTracks().forEach(t=>t.stop());isRecording=false;
+   $('recordBtn').textContent='🎙️';$('micStatus').textContent='Rekaman selesai. Putar kembali untuk mendengarkan suaramu.';
+   $('completeBtn').disabled=false;
+  };
+  mediaRecorder.start();isRecording=true;$('recordBtn').textContent='⏹️';$('micStatus').textContent='Sedang merekam... Tekan tombol lagi untuk berhenti.';
+ }catch(err){$('micStatus').textContent='Mikrofon tidak dapat diakses. Periksa izin mikrofon pada browser.'}
+}
+function completeTask(){
+ completed.add(currentLevel+'-'+currentItem);
+ const next=levels[currentLevel].items.findIndex((_,j)=>!completed.has(currentLevel+'-'+j));
+ show('feedback');
+}
+const diagnosticQuestions=[
+ {q:"Pilih huruf yang sama dengan contoh.",prompt:"A",opts:["A","B","D"],answer:"A"},
+ {q:"Pilih huruf yang sama dengan contoh.",prompt:"M",opts:["N","M","W"],answer:"M"},
+ {q:"Pilih kata yang sama dengan contoh.",prompt:"buku",opts:["bola","buku","baju"],answer:"buku"},
+ {q:"Pilih kata yang sama dengan contoh.",prompt:"meja",opts:["mata","meja","mama"],answer:"meja"},
+ {q:"Pilih kata yang sama dengan contoh.",prompt:"rumah",opts:["rumah","ramah","roti"],answer:"rumah"}
+];
+function startDiagnostic(){diagnosticIndex=0;diagnosticScore=0;diagnosticDone=false;renderDiagnosticQuestion();}
+function renderDiagnosticQuestion(){
+ const item=diagnosticQuestions[diagnosticIndex];
+ $('diagCounter').textContent='Soal '+(diagnosticIndex+1)+' dari '+diagnosticQuestions.length;
+ $('diagScore').textContent='Benar: '+diagnosticScore;
+ $('diagProgress').style.width=(diagnosticIndex/diagnosticQuestions.length*100)+'%';
+ $('diagQuestion').textContent=item.q;$('diagPrompt').textContent=item.prompt;
+ $('diagFeedback').classList.add('hidden');$('diagNext').classList.add('hidden');$('diagContinue').classList.add('hidden');
+ const options=$('diagOptions');options.innerHTML='';
+ item.opts.forEach(option=>{const btn=document.createElement('button');btn.className='secondary-btn';btn.textContent=option;btn.onclick=()=>answerDiagnostic(option);options.appendChild(btn);});
+}
+function answerDiagnostic(choice){
+ if(diagnosticDone)return;
+ const item=diagnosticQuestions[diagnosticIndex],correct=choice===item.answer;
+ if(correct)diagnosticScore++;diagnosticDone=true;
+ $('diagScore').textContent='Benar: '+diagnosticScore;$('diagFeedback').classList.remove('hidden');
+ $('diagFeedback').textContent=correct?'Betul! Jawabanmu tepat.':'Belum tepat. Jawaban yang benar adalah "'+item.answer+'". Tidak apa-apa, lanjutkan, ya!';
+ [...$('diagOptions').children].forEach(btn=>{btn.disabled=true;if(btn.textContent===item.answer)btn.style.border='2px solid #62b66d';});
+ if(diagnosticIndex<diagnosticQuestions.length-1)$('diagNext').classList.remove('hidden');else $('diagContinue').classList.remove('hidden');
+}
+function nextDiagnostic(){diagnosticIndex++;diagnosticDone=false;renderDiagnosticQuestion();}
+function finishDiagnostic(){
+ $('diagFinalScore').textContent=diagnosticScore+' dari '+diagnosticQuestions.length+' benar';
+ $('diagResultText').textContent='Tes awal sudah selesai. Kamu akan mulai belajar secara bertahap dari Level 1 bersama Truk Pintar.';
+ $('diagProgress').style.width='100%';show('diagResult');
+}
+</script>
+</body>
+</html>
